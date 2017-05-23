@@ -7,6 +7,7 @@ const host = process.env.NODE_ENV === "production"
 
 export const loadSpamData = () => dispatch => {
 	const url = host + "spamLookup";
+	console.log(202, url);
 	return axios
 		.get(url)
 		.then(data => {

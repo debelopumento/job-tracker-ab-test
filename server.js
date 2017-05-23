@@ -11,7 +11,6 @@ try {
 } catch (error) {
 	console.warn("unable to load .env");
 }
-DATABASE_URL = "mongodb://user2:password2@ds149501.mlab.com:49501/jobtrackerdb";
 const { PORT, DATABASE_URL } = require("./config");
 //console.log("DATABASE_URL: ", DATABASE_URL);
 DATABASE_URL = "mongodb://user2:password2@ds149501.mlab.com:49501/jobtrackerdb";
@@ -22,10 +21,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan("common"));
-app.use(express.static("build"));
+app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-	res.sendFile(__dirname + "/build/index.html");
+	res.sendFile(__dirname + "/public/index.html");
 });
 
 app.get("/spamLookup", (req, res) => {
