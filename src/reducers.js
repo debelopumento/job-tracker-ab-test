@@ -40,11 +40,22 @@ const spamCountReducer = (state = 0, action) => {
 	}
 };
 
+const spamStartTimeReducer = (state = null, action) => {
+	switch (action.type) {
+		case "SPAM_TIMER_STARTS": {
+			return action.payload;
+		}
+		default:
+			return state;
+	}
+};
+
 const allReducers = combineReducers({
 	spamCount: spamCountReducer,
 	spamPhoneScreenCount: spamPhoneScreenCountReducer,
 	spamTotalTime: spamTotalTimeReducer,
-	spamPhoneScreenPerMinute: spamPhoneScreenPerMinuteReducer
+	spamPhoneScreenPerMinute: spamPhoneScreenPerMinuteReducer,
+	spamStartTime: spamStartTimeReducer
 });
 
 export default allReducers;

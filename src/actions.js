@@ -6,11 +6,10 @@ const host = process.env.NODE_ENV === "production"
 	: "http://localhost:8080/";
 
 export const loadSpamData = () => dispatch => {
-	const url = "http://localhost:8080/spamLookup";
+	const url = host + "spamLookup";
 	return axios
 		.get(url)
 		.then(data => {
-			console.log(1, data.data.data);
 			dispatch({
 				type: "UPDATE_SPAM_COUNT",
 				payload: data.data.data.spamCount
@@ -27,6 +26,72 @@ export const loadSpamData = () => dispatch => {
 				type: "UPDATE_SPAM_PHONE_SCREEN_PER_MINUTE",
 				payload: data.data.data.phoneScreenPerMinute
 			});
+			dispatch({
+				type: "SPAM_TIMER_STARTS",
+				payload: data.data.data.temperaryStartTime
+			});
+		})
+		.catch(e => {
+			console.log(e);
+		});
+};
+
+export const startSpamTimer = () => dispatch => {
+	const url = host + "spamStart";
+	return axios
+		.put(url)
+		.then(data => {
+			const now = new Date().toString();
+			dispatch({
+				type: "SPAM_TIMER_STARTS",
+				payload: now
+			});
+		})
+		.catch(e => {
+			console.log(e);
+		});
+};
+
+export const endSpamTimer = () => dispatch => {
+	const url = host + "spamEnd";
+	return axios
+		.put(url)
+		.then(data => {
+			console.log(10);
+		})
+		.catch(e => {
+			console.log(e);
+		});
+};
+
+export const addSpamCount = () => dispatch => {
+	const url = host + "oneMoreSpam";
+	return axios
+		.put(url)
+		.then(data => {
+			const spamCount = store.getState().spamCount + 1;
+			dispatch({
+				type: "UPDATE_SPAM_COUNT",
+				payload: spamCount
+			});
+		})
+		.catch(e => {
+			console.log(e);
+		});
+};
+
+export const addPhoneScreen_spam = () => dispatch => {
+	const url = host + "oneMorePhoneScreen";
+	return axios
+		.put(url)
+		.then(data => {
+			const spamPhoneScreenCount =
+				store.getState().spamPhoneScreenCount + 1;
+			dispatch({
+				type: "UPDATE_SPAM_PHONE_SCREEN_COUNT",
+				payload: spamPhoneScreenCount
+			});
+			console.log(19);
 		})
 		.catch(e => {
 			console.log(e);
