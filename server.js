@@ -11,9 +11,10 @@ try {
 } catch (error) {
 	console.warn("unable to load .env");
 }
-
+DATABASE_URL = "mongodb://user2:password2@ds149501.mlab.com:49501/jobtrackerdb";
 const { PORT, DATABASE_URL } = require("./config");
-console.log("DATABASE_URL: ", DATABASE_URL);
+//console.log("DATABASE_URL: ", DATABASE_URL);
+DATABASE_URL = "mongodb://user2:password2@ds149501.mlab.com:49501/jobtrackerdb";
 
 const { Spams } = require("./models-spam");
 
