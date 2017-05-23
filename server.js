@@ -21,6 +21,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan("common"));
+app.use(express.static("build"));
+
+app.get("/", (req, res) => {
+	res.sendFile(__dirname + "/build/index.html");
+});
 
 app.get("/spamLookup", (req, res) => {
 	Spams.findById("5923aa19f36d285f678a6654")
