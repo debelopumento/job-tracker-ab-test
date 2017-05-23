@@ -91,7 +91,6 @@ export const addPhoneScreen_spam = () => dispatch => {
 				type: "UPDATE_SPAM_PHONE_SCREEN_COUNT",
 				payload: spamPhoneScreenCount
 			});
-			console.log(19);
 		})
 		.catch(e => {
 			console.log(e);
