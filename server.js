@@ -26,12 +26,50 @@ app.get("/spamLookup", (req, res) => {
 	Spams.findById("5923aa19f36d285f678a6654")
 		.exec()
 		.then(data => {
-			console.log(100, data);
 			res.json({ data });
 		})
 		.catch(err => {
-			res.json({ message: "internal server error" });
+			res.json({ message: "Internal server error" });
 		});
+});
+
+app.put("/spamStart", (req, res) => {
+	const now = new Date().getTime();
+	console.log(now);
+	const reqBody = { temperaryStartTime: now };
+	Spams.findByIdAndUpdate("5923aa19f36d285f678a6654", reqBody)
+		.exec()
+		.then(date => {
+			res.json({ message: `Started spamming at: ${now}` });
+		})
+		.catch(err => {
+			res.json({ message: "Internal server error" });
+		});
+});
+
+app.put("/spamEnd", (req, res) => {
+	const now = new Date().getTime();
+
+	Spams.findById("5923aa19f36d285f678a6654").exec().then(data => {
+		const spamStart = data.temperaryStartTime.getTime();
+		const spamDuration = Math.floor((now - spamStart) / 60000);
+		const totalTimeInvested = data.totalTimeInvested + spamDuration;
+		console.log(10, totalTimeInvested);
+		const reqBody = {
+			totalTimeInvested: totalTimeInvested
+		};
+
+		Spams.findByIdAndUpdate("5923aa19f36d285f678a6654", reqBody)
+			.exec()
+			.then(date => {
+				res.json({
+					message: `Total time invested in spamming: ${totalTimeInvested} minutes.`
+				});
+			})
+			.catch(err => {
+				res.json({ message: "Internal server error" });
+			});
+	});
 });
 
 app.use("*", function(req, res) {

@@ -5,8 +5,7 @@ const spamSchema = mongoose.Schema({
 	spamCount: Number,
 	phoneScreenCount: Number,
 	totalTimeInvested: Number, //minutes
-	temperaryStartTime: Date,
-	temperaryEndTime: Date
+	temperaryStartTime: Date
 });
 
 spamSchema.methods.apiRepr = () => {
@@ -20,4 +19,3 @@ spamSchema.methods.apiRepr = () => {
 const Spams = mongoose.model("Spams", spamSchema, "spamcollection");
 
 module.exports = { Spams };
-
