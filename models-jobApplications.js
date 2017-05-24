@@ -1,18 +1,18 @@
 const mongoose = require("mongoose");
 
-const spamSchema = mongoose.Schema({
+const jobApplicationSchema = mongoose.Schema({
 	id: String,
-	spamCount: Number,
+	applicationCount: Number,
 	phoneScreenCount: Number,
 	totalTimeInvested: Number, //minutes
 	temperaryStartTime: Date,
 	phoneScreenPerMinute: Number
 });
 
-spamSchema.methods.apiRepr = () => {
+jobApplicationSchema.methods.apiRepr = () => {
 	return {
 		id: this._id,
-		spamCount: this.spamCount,
+		applicationCount: this.applicationCount,
 		phoneScreenCount: this.phoneScreenCount,
 		totalTimeInvested: this.totalTimeInvested,
 		temperaryStartTime: this.temperaryStartTime,
@@ -20,6 +20,10 @@ spamSchema.methods.apiRepr = () => {
 	};
 };
 
-const Spams = mongoose.model("Spams", spamSchema, "spamcollection");
+const JobApplications = mongoose.model(
+	"JobApplications",
+	jobApplicationSchema,
+	"customizedapplicationcollection"
+);
 
-module.exports = { Spams };
+module.exports = { JobApplications };

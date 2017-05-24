@@ -16,12 +16,74 @@ const { PORT, DATABASE_URL } = require("./config");
 console.log("DATABASE_URL: ", DATABASE_URL);
 
 const { Spams } = require("./models-spam");
+const { JobApplications } = require("./models-jobApplications");
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan("common"));
-//app.use(express.static("build"));
+
+app.get("/jobApplicationLookup", (req, res) => {
+	JobApplications.findById("5925b56ff36d2821ab7a96d2")
+		.exec()
+		.then(data => {
+			console.log(data);
+			res.json({ data });
+		})
+		.catch(err => {
+			res.json({ message: "Internal server error" });
+		});
+});
+
+app.put("/jobApplicationStart", (req, res) => {
+	const now = new Date().getTime();
+	const reqBody = { temperaryStartTime: now };
+	JobApplications.findByIdAndUpdate("5925b56ff36d2821ab7a96d2", reqBody)
+		.exec()
+		.then(data => {
+			res.json({ message: `Started job applications at: ${now}` });
+		})
+		.catch(err => {
+			res.json({ message: "Internal server error" });
+		});
+});
+
+app.put("/jobApplicationEnd", (req, res) => {
+	const now = new Date().getTime();
+	JobApplications.findById("5925b56ff36d2821ab7a96d2").exec().then(data => {
+		if (data.temperaryStartTime !== null) {
+			const start = data.temperaryStartTime.getTime();
+			const duration = Math.floor((now - start) / 60000);
+			const totalTimeInvested = data.totalTimeInvested + duration;
+			const phoneScreenCount = data.phoneScreenCount;
+			const phoneScreenPerMinute = (phoneScreenCount /
+				totalTimeInvested).toFixed(8);
+			const reqBody = {
+				temperaryStartTime: null,
+				totalTimeInvested: totalTimeInvested,
+				phoneScreenPerMinute: phoneScreenPerMinute
+			};
+
+			JobApplications.findByIdAndUpdate(
+				"5925b56ff36d2821ab7a96d2",
+				reqBody
+			)
+				.exec()
+				.then(data => {
+					res.json({
+						message: `Total time invested in job applications: ${totalTimeInvested} minutes.`
+					});
+				})
+				.catch(err => {
+					res.json({ message: "Internal server error" });
+				});
+		} else {
+			res.json({
+				message: `Cannot find record of job application start time.`
+			});
+		}
+	});
+});
 
 app.get("/spamLookup", (req, res) => {
 	Spams.findById("5923aa19f36d285f678a6654")
