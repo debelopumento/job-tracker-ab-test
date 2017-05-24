@@ -11,9 +11,9 @@ try {
 } catch (error) {
 	console.warn("unable to load .env");
 }
+
 const { PORT, DATABASE_URL } = require("./config");
-//console.log("DATABASE_URL: ", DATABASE_URL);
-DATABASE_URL = "mongodb://user2:password2@ds149501.mlab.com:49501/jobtrackerdb";
+console.log("DATABASE_URL: ", DATABASE_URL);
 
 const { Spams } = require("./models-spam");
 
@@ -21,10 +21,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan("common"));
-app.use(express.static("public"));
+app.use(express.static("build"));
 
 app.get("/", (req, res) => {
-	res.sendFile(__dirname + "/public/index.html");
+	res.json({ message: "job tracker ab test" });
 });
 
 app.get("/spamLookup", (req, res) => {
