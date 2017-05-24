@@ -5,9 +5,76 @@ const host = process.env.NODE_ENV === "production"
 	? "/"
 	: "http://localhost:8080/";
 
+export const loadJobApplicationData = () => dispatch => {
+	const url = host + "jobApplicationLookup";
+	return axios
+		.get(url)
+		.then(data => {
+			dispatch({
+				type: "UPDATE_JOB_APPLICATION_TOTAL_TIME",
+				payload: data.data.data.totalTimeInvested
+			});
+			dispatch({
+				type: "UPDATE_JOB_APPLICATION_PHONE_SCREEN_COUNT",
+				payload: data.data.data.phoneScreenCount
+			});
+			dispatch({
+				type: "UPDATE_JOB_APPLICATION_PHONE_SCREEN_PER_MINUTE",
+				payload: data.data.data.phoneScreenPerMinute
+			});
+		})
+		.catch(e => {
+			console.log(e);
+		});
+};
+
+export const addPhoneScreen_jobApplication = () => dispatch => {
+	const url = host + "incrementPhoneScreenFromJobApplication";
+	return axios
+		.put(url)
+		.then(data => {
+			const jobApplicationPhoneScreenCount =
+				store.getState().jobApplicationPhoneScreenCount + 1;
+			dispatch({
+				type: "UPDATE_JOB_APPLICATION_PHONE_SCREEN_COUNT",
+				payload: jobApplicationPhoneScreenCount
+			});
+		})
+		.catch(e => {
+			console.log(e);
+		});
+};
+
+export const startJobApplicationTimer = () => dispatch => {
+	const url = host + "jobApplicationStart";
+	return axios
+		.put(url)
+		.then(data => {
+			const now = new Date().toString();
+			dispatch({
+				type: "START_JOB_APPLICATION",
+				payload: now
+			});
+		})
+		.catch(e => {
+			console.log(e);
+		});
+};
+
+export const endJobApplicationTimer = () => dispatch => {
+	const url = host + "jobApplicationEnd";
+	return axios
+		.put(url)
+		.then(data => {
+			console.log(1011);
+		})
+		.catch(e => {
+			console.log(e);
+		});
+};
+
 export const loadSpamData = () => dispatch => {
 	const url = host + "spamLookup";
-	console.log(202, url);
 	return axios
 		.get(url)
 		.then(data => {

@@ -36,7 +36,7 @@ class Spams extends PureComponent {
 						Increment spam count
 					</button>
 					<button onClick={this.incrementSpamPhoneScreen}>
-						Increment spam phone screen
+						Increment phone screen from spam applications
 					</button>
 				</div>
 			);

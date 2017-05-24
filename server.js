@@ -85,6 +85,29 @@ app.put("/jobApplicationEnd", (req, res) => {
 	});
 });
 
+app.put("/incrementPhoneScreenFromJobApplication", (req, res) => {
+	JobApplications.findById("5925b56ff36d2821ab7a96d2").exec().then(data => {
+		const phoneScreenCount = data.phoneScreenCount + 1;
+		const totalTimeInvested = data.totalTimeInvested;
+		const phoneScreenPerMinute = (phoneScreenCount /
+			totalTimeInvested).toFixed(8);
+		const reqBody = {
+			phoneScreenCount: phoneScreenCount,
+			phoneScreenPerMinute: phoneScreenPerMinute
+		};
+		JobApplications.findByIdAndUpdate("5925b56ff36d2821ab7a96d2", reqBody)
+			.exec()
+			.then(data => {
+				res.json({
+					message: `One more phone screen? Congrats!`
+				});
+			})
+			.catch(err => {
+				res.json({ message: "Internal server error" });
+			});
+	});
+});
+
 app.get("/spamLookup", (req, res) => {
 	Spams.findById("5923aa19f36d285f678a6654")
 		.exec()
